@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import store from './store';
 
 import { IonicVue } from '@ionic/vue';
 
@@ -22,6 +23,7 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import './assets/global.css';
 
 // Layouts
 import BaseLayout from './components/BaseLayout'
@@ -29,6 +31,7 @@ import BaseLayout from './components/BaseLayout'
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
+  .use(store)
   .use(BaseLayout);
 
 app.component('base-layout', BaseLayout)
