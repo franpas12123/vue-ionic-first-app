@@ -23,10 +23,16 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+// Layouts
+import BaseLayout from './components/BaseLayout'
+
 const app = createApp(App)
   .use(IonicVue)
-  .use(router);
-  
+  .use(router)
+  .use(BaseLayout);
+
+app.component('base-layout', BaseLayout)
+
 router.isReady().then(() => {
   app.mount('#app');
 });
