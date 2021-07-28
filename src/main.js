@@ -26,7 +26,7 @@ import './theme/variables.css';
 import './assets/global.css';
 
 // Layouts
-import BaseLayout from './components/BaseLayout'
+import BaseLayout from './layouts/BaseLayout'
 
 const app = createApp(App)
   .use(IonicVue)
