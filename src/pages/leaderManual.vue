@@ -1,6 +1,32 @@
 <template>
-  <base-layout pageTitle="Personalized Leader Manual">
+  <base-layout pageTitle="" showLogo="true">
     <div class="">
+      <div class="plm-top-container">
+        <ion-img
+          :src="require('../assets/logo.png')"
+          class="plm-logo ion-margin-start ion-margin-top ion-margin-end"
+        ></ion-img>
+        <ion-buttons slot="end">
+          <ion-button color="secondary">
+            <ion-icon
+              :icon="logOutOutline"
+              slot="end"
+              class="logoIcon"
+              @click="logout"
+            ></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+      <div class="cover ion-margin-start ion-margin-end">
+        <ion-text>
+          <h1 class="content-title">
+            <strong>{{ title }}</strong>
+          </h1>
+          <h4 class="content-subtitle">{{ name }}</h4>
+        </ion-text>
+        <!-- <ion-img :src="require('@/assets/plm template.png')"></ion-img> -->
+        <ion-img :src="require('@/assets/plm template white bg.png')"></ion-img>
+      </div>
       <ion-list>
         <ion-item v-for="module in modules" :key="`module-${module.id}`">
           <ion-label class="ion-text-wrap">
@@ -86,6 +112,8 @@ import BaseLayout from '../layouts/BaseLayout.vue';
 import lodash from 'lodash';
 import { mapActions } from 'vuex';
 import { QuestionTypes, SectionTypes } from '@/models';
+import store from '@/store';
+import { logOutOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'LeaderManual',
@@ -102,10 +130,12 @@ export default defineComponent({
       multigraph: {},
       sortedKeys: [],
       sortedMultigraph: [],
+      title: 'Personalized Leader Manual',
+      logOutOutline,
     };
   },
   methods: {
-    ...mapActions(['buildLeaderManual', 'patchAnswer', 'fetchMultigraph']),
+    ...mapActions(['buildLeaderManual', 'patchAnswer', 'fetchMultigraph', 'getStudent']),
     formatParagraphs(longString) {
       // string copy to prevent infinite loop issues for some reason
       const split = `${longString}`.split('\n\n');
@@ -174,6 +204,10 @@ export default defineComponent({
       // 6. competencies by mean (dev indicator)
       mgraphArr.push({ development_indicator: mgraph[key[5]] });
     },
+    logout() {
+      console.log('heey');
+      this.$router.push('/login');
+    },
   },
   mounted() {
     this.buildLeaderManual().then((modules) => {
@@ -198,12 +232,47 @@ export default defineComponent({
       ];
       this.sortMultigraph();
     });
+    store
+      .dispatch('checkStorageForStudent')
+      .then((student) => {
+        const isAuthenticated = !!student;
+        if (isAuthenticated) this.name = student.name;
+        else console.log('unauthorized');
+      })
+      .catch(() => console.log('err'));
   },
 });
 </script>
 
-BaseLayout
 <style scoped>
+.cover {
+  height: 100vh;
+  /* background: rgb(222, 229, 227);
+  background: linear-gradient(
+    260deg,
+    rgba(222, 229, 227, 1) 0%,
+    rgba(222, 229, 227, 1) 35%,
+    rgba(255, 255, 255, 1) 100%
+  ); */
+}
+
+.cover ion-img {
+  position: absolute;
+  bottom: 0px;
+  right: -5%;
+  width: 80%;
+  /* width: 90%; */
+  /* margin-top: 50%; */
+}
+
+.plm-logo {
+  width: 50vw;
+}
+
+.plm-top-container {
+  display: flex;
+  justify-content: space-between;
+}
 /* #container {
   text-align: center;
 
