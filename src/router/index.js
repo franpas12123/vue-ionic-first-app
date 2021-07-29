@@ -3,6 +3,8 @@ import LeaderManual from '@/pages/leaderManual.vue'
 import Login from '@/pages/login.vue'
 import store from '@/store'
 
+const loginRoute = '/login'
+
 const authGuard = (to, from, next) => {
   // check state
   const isLoggedIn = store.state.loggedIn
@@ -13,20 +15,20 @@ const authGuard = (to, from, next) => {
       .then(student => {
         const isAuthenticated = !!student
         if (isAuthenticated) next()
-        else next('/')
+        else next({path: loginRoute, query: {redirect: to.fullPath}})
       })
-      .catch(() => next('/'))
+      .catch(() => next({path: loginRoute, query: {redirect: to.fullPath}}))
   else
     next()
 }
 
 const routes = [
   {
-    path: '/',
-    component: Login
+    path: loginRoute,
+    component: Login,
   },
   {
-    path: '/leader-manual',
+    path: '/',
     name: 'LeaderManual',
     beforeEnter: authGuard,
     component: LeaderManual
