@@ -2,14 +2,17 @@
   <ion-page>
     <!-- <Sidebar></Sidebar> -->
     <ion-header :translucent="true" v-if="pageTitle != 'Login'">
-      <ion-toolbar>
-        <ion-title
-          ><strong>{{ pageTitle }}</strong></ion-title
-        >
-        <ion-buttons slot="start">
-          <ion-menu-button autoHide="false"></ion-menu-button>
+      <!-- <ion-toolbar>
+        <ion-img v-if="showLogo" :src="require('@/assets/logo.png')"></ion-img>
+        <ion-title>
+          <strong>{{ pageTitle }}</strong>
+        </ion-title>
+        <ion-buttons slot="end">
+          <ion-button color="secondary">
+            <ion-icon :icon="logOutOutline" slot="start" class="logoIcon"></ion-icon>
+          </ion-button>
         </ion-buttons>
-      </ion-toolbar>
+      </ion-toolbar> -->
     </ion-header>
     <ion-content :fullscreen="true">
       <slot />
@@ -21,31 +24,36 @@
 import {
   IonPage,
   IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonMenuButton,
-  IonButtons,
+  // IonToolbar,
+  // IonTitle,
+  // IonContent,
+  // IonButtons,
   // menuController,
 } from '@ionic/vue';
 import { mapActions } from 'vuex';
-// import Sidebar from './SidebarLayout';
+import { logOutOutline } from 'ionicons/icons';
 
 export default {
-  props: ['pageTitle'],
+  props: ['pageTitle', 'showLogo'],
   components: {
     IonPage,
     IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonMenuButton,
-    IonButtons,
+    // IonToolbar,
+    // IonTitle,
+    // IonContent,
+    // IonButtons,
     // Sidebar,
   },
   data() {
-    return {};
+    return {
+      logOutOutline,
+    };
   },
+  // computed: {
+  //   logo() {
+  //     return this.logoPath ?
+  //   },
+  // },
   methods: {
     ...mapActions(['getStudent']),
     // openSidebar() {
@@ -54,10 +62,11 @@ export default {
     //   console.log('opensidebar');
     // },
   },
-  created() {
-    console.log('student');
-    console.log(this.getStudent);
-    console.log(this.$store.state);
-  },
 };
 </script>
+
+<style scoped>
+.logoIcon {
+  padding-left: 3px;
+}
+</style>
