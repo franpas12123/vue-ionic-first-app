@@ -68,21 +68,21 @@ export default {
   components: { BaseLayout, IonInput, IonItem, IonIcon },
   methods: {
     ...mapActions(['checkStorageForStudent', 'fetchStudent']),
-    submit() {
-      console.log('signin');
-      console.log(this.email);
-      console.log(this.password);
-
+    async submit() {
       if (!this.email || !this.emailRegex.test(this.email)) {
         this.error = 'Please provide a valid email address';
       } else if (!this.password) {
         this.error = 'Please provide a valid password';
       } else {
         this.loading = true;
-        this.fetchStudent({ email: this.email, password: this.password })
+        await this.fetchStudent({ email: this.email, password: this.password })
           .then(() => {
             this.$emit('close');
             this.loading = false;
+            console.log('signin');
+            console.log(this.email);
+            console.log(this.password);
+            this.$router.push('/');
           })
           .catch((error) => {
             this.error = error;
@@ -93,7 +93,7 @@ export default {
   },
   mounted() {
     this.checkStorageForStudent().then((student) => {
-      if (student) this.$emit('close');
+      if (student) this.$router.push({ name: 'LeaderManual' });
     });
 
     document.addEventListener('keyup', (event) => {
