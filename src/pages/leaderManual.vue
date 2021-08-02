@@ -42,6 +42,68 @@
                   <p>
                     <strong>{{ question.title }}</strong>
                   </p>
+
+                  <div class="wheel" v-if="question.section_type === SectionTypes.Wheel">
+                    <ion-img :src="question.content[0].content" :alt="question.title">
+                    </ion-img>
+                  </div>
+
+                  <!-- Add Behavior Section -->
+
+                  <template v-else-if="question.answer">
+                    <ion-text>
+                      <!-- Text Short -->
+                      <p v-if="question.type === QuestionTypes.TextShort">
+                        <em v-if="!isEmpty(question.answer.edited_payload)">
+                          {{ question.answer.edited_payload }}
+                        </em>
+                        <em v-else>{{ question.answer.payload }}</em>
+                      </p>
+
+                      <!-- Text Paragraph and Text box -->
+                      <template
+                        v-else-if="
+                          question.type === QuestionTypes.TextParagraph ||
+                            question.type === QuestionTypes.TextBox
+                        "
+                      >
+                        <template v-if="!isEmpty(question.answer.edited_payload)">
+                          <div
+                            v-if="
+                              formatParagraphs(question.answer.edited_payload).length > 0
+                            "
+                            class="paragraphs"
+                          >
+                            <p
+                              v-for="(s, si) in formatParagraphs(
+                                question.answer.edited_payload
+                              )"
+                              :key="`s${si}`"
+                            >
+                              {{ s }}
+                            </p>
+                          </div>
+                          <em class="text-light-gray" v-else>No Answer</em>
+                        </template>
+
+                        <template v-else-if="!isEmpty(question.answer.payload)">
+                          <div
+                            v-if="formatParagraphs(question.answer.payload).length > 0"
+                            class="paragraphs"
+                          >
+                            <p
+                              v-for="(s, si) in formatParagraphs(question.answer.payload)"
+                              :key="`s${si}`"
+                            >
+                              {{ s }}
+                            </p>
+                          </div>
+                          <em class="text-light-gray" v-else>No Answer</em>
+                        </template>
+                      </template>
+                    </ion-text>
+                  </template>
+
                   <ion-note class="secodary">
                     {{ question.answer }}
                   </ion-note>
